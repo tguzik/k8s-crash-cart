@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# ---
+# Docs:
+# https://taskfile.dev/
+# https://taskfile.dev/docs/reference/schema
+version: "3"
+
+vars:
+  DEBUG: false
+  APP_CONTAINER_NAME: "k8s-crash-cart"
+  DERIVATION_CONTAINER_OUT_LINK: container-image.tar.gz
+
+tasks:
+  default:
+    desc: Default task
+    silent: true
+    cmd: echo "List all tasks with [$] task --list-all"
+
+  all:
+    desc: Task used as the CI workflow entry point.
+    aliases:
+      - ci
+    cmds:
+      - task: prepare
+      - task: nix:derive
+      - task: nix:sbom
+      - task: container:run
+      - cmd: echo Workflow completed.
+
+  clean:
+    desc: Clean up artifacts
+    cmds:
+      - cmd: git clean -fdx target/
+
+  prepare:
+    desc: Prepare for build
+    cmds:
+      - task: clean
+      - cmd: mkdir -p target/
+
+  nix:derive:
+    desc: Uses Nix to build the flake, producing a .tar.gz with the container image
+    vars:
+      NIX_BUILD_FLAGS: >-
+        {{if .DEBUG}}--verbose{{end}}
+    cmds:
+      - cmd: nix build  {{ .NIX_BUILD_FLAGS }}  .#oci-image  --out-link target/{{ .DERIVATION_CONTAINER_OUT_LINK | shellQuote }}
+
+  nix:sbom:
+    desc: Generate Software Bill Of Materials (SBOM) with the contents of the container image
+    vars:
+      OUTPUT_DIR: target/sbom
+      SBOM_CDX: "{{ .OUTPUT_DIR }}/sbom.cdx.json"
+      SBOM_CSV: "{{ .OUTPUT_DIR }}/sbom.csv"
+      SBOM_SPDX: "{{ .OUTPUT_DIR }}/sbom.spdx.json"
+    cmds:
+      - cmd: mkdir -p {{ .OUTPUT_DIR | shellQuote }}
+      - cmd: |
+          sbomnix .#oci-image-content --cdx {{ .SBOM_CDX | shellQuote }} --csv {{ .SBOM_CSV | shellQuote }} --spdx {{ .SBOM_SPDX | shellQuote }}
+      - silent: true
+        cmd: |
+          echo
+          echo "::group::Contents of {{ .OUTPUT_DIR }} directory:"
+          ls -lah {{ .OUTPUT_DIR | shellQuote }}
+          echo
+          echo "::endgroup::"
+
+  container:run:
+    desc: Load the container image, run it and remove it from local storage afterwards
+    vars:
+      CONTAINER_ID: "localhost/{{ .APP_CONTAINER_NAME }}:latest"
+    cmds:
+      - cmd: podman load --input target/{{ .DERIVATION_CONTAINER_OUT_LINK | shellQuote }}
+      - defer: podman image rm  {{ .CONTAINER_ID | shellQuote }}
+      - cmd: podman images  {{ .APP_CONTAINER_NAME | shellQuote }}
+      - cmd: podman run -it --rm  {{ .CONTAINER_ID }} ls -lah /
+      - cmd: podman run -it --rm  {{ .CONTAINER_ID }} kubectl version --client
+
+# eof
