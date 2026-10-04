@@ -1,9 +1,21 @@
-# Ignore build outputs from performing a nix-build or `nix build` command
-result
-result-*
+# Build and temporary directories
+.task/
+bin/
+build/
+dist/
+target/
+tmp/
 
-# Ignore automatically generated direnv output
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# <DevEnv>
+# https://devenv.sh/
+.devenv*
 .direnv
+.pre-commit-config.yaml
+devenv.local.nix
+# </DevEnv>
 
-# Ignore NixOS interactive test driver history
-**/.nixos-test-history
+# eof
