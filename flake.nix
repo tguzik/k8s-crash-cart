@@ -24,11 +24,12 @@
             name = "oci-image-content";
             paths = with pkgs; [
               # Basic packages to let us comfortably use shell in this container:
-              bash
-              coreutils-full
-              procps
-              iana-etc
-              cacert
+              bash # https://www.gnu.org/software/bash/ # GNU Bourne-Again Shell; package for interactive use.
+              cacert # Bundle of X.509 certificates of public Certificate Authorities (CA)
+              htop # https://github.com/htop-dev/htop # Interactive process viewer
+              iana-etc # https://github.com/Mic92/iana-etc # IANA protocol and port number assignments (/etc/protocols and /etc/services)
+              procps # https://gitlab.com/procps-ng/procps # Utilities that give information about processes using the /proc filesystem
+              uutils-coreutils-noprefix # https://github.com/uutils/coreutils # Cross-platform Rust rewrite of the GNU coreutils
 
               # Kubernetes CLIs:
               kubectl # https://github.com/kubernetes/kubectl # Kubernetes CLI
