@@ -31,9 +31,11 @@
               procps # https://gitlab.com/procps-ng/procps # Utilities that give information about processes using the /proc filesystem
               uutils-coreutils-noprefix # https://github.com/uutils/coreutils # Cross-platform Rust rewrite of the GNU coreutils
 
-              # Kubernetes CLIs:
-              kubectl # https://github.com/kubernetes/kubectl # Kubernetes CLI
+              # Kubernetes-specific CLIs:
               k9s # https://github.com/derailed/k9s # Kubernetes CLI To Manage Your Clusters In Style
+              kubectl # https://github.com/kubernetes/kubectl # Kubernetes CLI
+              kubectl-gadget # https://github.com/inspektor-gadget/inspektor-gadget # Troubleshoot K8S applications using eBPF
+              stern # https://github.com/stern/stern # Multi pod and container log tailing for Kubernetes
 
               # Networking and system utilities (these will be heavily restricted within a container, but still may be useful):
               iproute2 # https://wiki.linuxfoundation.org/networking/iproute2 # Utilities for controlling TCP/IP networking
