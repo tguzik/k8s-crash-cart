@@ -8,6 +8,7 @@ version: "3"
 vars:
   DEBUG: false
   APP_CONTAINER_NAME: "k8s-crash-cart"
+  CONTAINER_ID: "localhost/{{ .APP_CONTAINER_NAME }}:latest"
   DERIVATION_CONTAINER_OUT_LINK: container-image.tar.gz
 
 tasks:
@@ -24,7 +25,7 @@ tasks:
       - task: prepare
       - task: nix:derive
       - task: nix:sbom
-      - task: container:run
+      - task: container:smoke-test
       - cmd: echo Workflow completed.
 
   clean:
@@ -65,15 +66,24 @@ tasks:
           echo
           echo "::endgroup::"
 
-  container:run:
+  container:smoke-test:
     desc: Load the container image, run it and remove it from local storage afterwards
-    vars:
-      CONTAINER_ID: "localhost/{{ .APP_CONTAINER_NAME }}:latest"
     cmds:
       - cmd: podman load --input target/{{ .DERIVATION_CONTAINER_OUT_LINK | shellQuote }}
       - defer: podman image rm  {{ .CONTAINER_ID | shellQuote }}
       - cmd: podman images  {{ .APP_CONTAINER_NAME | shellQuote }}
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID }} ls -lah /
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID }} kubectl version --client
+      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
+      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
+
+  container:run:
+    desc: Build, run the container interactively and then remove it
+    interactive: true
+    deps:
+      - nix:derive
+    cmds:
+      - cmd: podman load --input target/{{ .DERIVATION_CONTAINER_OUT_LINK | shellQuote }}
+      - defer: podman image rm  {{ .CONTAINER_ID | shellQuote }}
+      - ignore_error: true
+        cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }}
 
 # eof
