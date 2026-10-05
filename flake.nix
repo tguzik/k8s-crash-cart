@@ -35,6 +35,16 @@
               kubectl # https://github.com/kubernetes/kubectl # Kubernetes CLI
               k9s # https://github.com/derailed/k9s # Kubernetes CLI To Manage Your Clusters In Style
 
+              # Networking and system utilities (these will be heavily restricted within a container, but still may be useful):
+              iproute2 # https://wiki.linuxfoundation.org/networking/iproute2 # Utilities for controlling TCP/IP networking
+              iputils # https://github.com/iputils/iputils # Set of small useful utilities for Linux networking
+              libressl # https://www.libressl.org # Free TLS/SSL implementation. Includes `nc`, `ocspcheck` and `openssl` CLIs.
+              lsof # https://github.com/lsof-org/lsof # Tool to list open files
+              mtr # https://github.com/traviscross/mtr # Network diagnostics tool
+              strace # https://github.com/strace/strace # System call tracer for Linux
+              sysstat # https://github.com/sysstat/sysstat # Performance monitoring tools, e.g. `sar`, `iostat` and `pidstat`
+              tcpdump # https://www.tcpdump.org/ # Network sniffer
+
               # Text editors:
               nano # https://www.nano-editor.org/ # Small, user-friendly console text editor
               vim # https://www.vim.org/ # Most popular clone of the VI editor
@@ -56,13 +66,10 @@
               curlFull # https://curl.se/ # Command line tool for transferring files with URL syntax
               wget # https://www.gnu.org/software/wget/ # Tool for retrieving files using HTTP, HTTPS, and FTP
 
-              # Traffic generation:
+              # Traffic capture and generation:
               k6 # https://github.com/grafana/k6 # Modern load testing tool, using Go and JavaScript
               har-to-k6 # https://github.com/grafana/har-to-k6 # Converts LI-HAR and HAR to K6 script
-
-              # Traffic capture:
               goreplay # https://github.com/probelabs/goreplay # Open-source tool for capturing and replaying live HTTP traffic
-              tcpdump # https://www.tcpdump.org/ # Network sniffer
 
               # ...
             ];
