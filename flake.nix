@@ -37,7 +37,7 @@
               kubectl-gadget # https://github.com/inspektor-gadget/inspektor-gadget # Troubleshoot K8S applications using eBPF
               stern # https://github.com/stern/stern # Multi pod and container log tailing for Kubernetes
 
-              # Networking and system utilities (these will be heavily restricted within a container, but still may be useful):
+              # Networking and system utilities (these will be heavily restricted within a container, but may still be useful):
               iproute2 # https://wiki.linuxfoundation.org/networking/iproute2 # Utilities for controlling TCP/IP networking
               iputils # https://github.com/iputils/iputils # Set of small useful utilities for Linux networking
               libressl # https://www.libressl.org # Free TLS/SSL implementation. Includes `nc`, `ocspcheck` and `openssl` CLIs.
@@ -46,6 +46,7 @@
               strace # https://github.com/strace/strace # System call tracer for Linux
               sysstat # https://github.com/sysstat/sysstat # Performance monitoring tools, e.g. `sar`, `iostat` and `pidstat`
               tcpdump # https://www.tcpdump.org/ # Network sniffer
+              dnslookup # https://github.com/ameshkov/dnslookup # Simple CLI to make DNS lookups to the specified server
 
               # Text editors:
               nano # https://www.nano-editor.org/ # Small, user-friendly console text editor
