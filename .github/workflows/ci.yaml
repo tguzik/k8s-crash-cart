@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  workflow_dispatch:  # No additional yaml keys are necessary
+  pull_request:  # No additional yaml keys are necessary
+  push:
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci-using-devenv:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # https://github.com/actions/checkout/releases/tag/v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # https://github.com/cachix/install-nix-action/releases/tag/v31.11.0
+        with:
+          nix_path: nixpkgs=channel:nixos-26.05
+
+      - name: Print nixpkgs version
+        run: |
+          nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+
+      - name: Install DevEnv
+        run: |
+          nix profile add nixpkgs#devenv
+
+      - name: Run devenv test
+        run: |
+          devenv test
+
+      - name: Run tasks
+        shell: devenv --profile github-actions shell bash -- -e {0}
+        run: |
+          task ci
+
+# eof
