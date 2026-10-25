@@ -25,7 +25,7 @@ tasks:
       - task: prepare
       - task: nix:derive
       - task: nix:sbom
-      - task: container:smoke-test
+      - task: container:test
       - cmd: echo Workflow completed.
 
   clean:
@@ -66,12 +66,39 @@ tasks:
           echo
           echo "::endgroup::"
 
-  container:smoke-test:
-    desc: Load the container image, run it and remove it from local storage afterwards
+  container:test:
+    desc: Encapsulates operations testing the newly derived image
+    deps:
+      - nix:derive
     cmds:
       - cmd: podman load --input target/{{ .DERIVATION_CONTAINER_OUT_LINK | shellQuote }}
       - defer: podman image rm  {{ .CONTAINER_ID | shellQuote }}
+      - task: container:inspect
+      - task: container:smoke-test
+
+  container:inspect:
+    internal: true
+    desc: Print information about the container image
+    cmds:
+      - silent: true
+        cmd: |
+          echo
+          echo "::group::Container image details"
+          echo
       - cmd: podman images  {{ .APP_CONTAINER_NAME | shellQuote }}
+      - cmd: podman image inspect {{ .CONTAINER_ID | shellQuote }}
+      - cmd: podman image tree {{ .CONTAINER_ID | shellQuote }}
+      - cmd: podman image history {{ .CONTAINER_ID | shellQuote }}
+      - silent: true
+        cmd: |
+          echo
+          echo "::endgroup::"
+          echo
+
+  container:smoke-test:
+    internal: true
+    desc: Run sample commands in the image to ensure it is usable
+    cmds:
       - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
       - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
 

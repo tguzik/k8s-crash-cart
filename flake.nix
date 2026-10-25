@@ -43,8 +43,6 @@
               libressl # https://www.libressl.org # Free TLS/SSL implementation. Includes `nc`, `ocspcheck` and `openssl` CLIs.
               lsof # https://github.com/lsof-org/lsof # Tool to list open files
               mtr # https://github.com/traviscross/mtr # Network diagnostics tool
-              strace # https://github.com/strace/strace # System call tracer for Linux
-              sysstat # https://github.com/sysstat/sysstat # Performance monitoring tools, e.g. `sar`, `iostat` and `pidstat`
               tcpdump # https://www.tcpdump.org/ # Network sniffer
               dnslookup # https://github.com/ameshkov/dnslookup # Simple CLI to make DNS lookups to the specified server
 
@@ -54,11 +52,6 @@
 
               # Script runtimes:
               nodejs # https://nodejs.org/ # Event-driven I/O framework for the V8 JavaScript engine
-
-              # Task runners
-              gnumake # https://www.gnu.org/software/make/ # Tool to control the generation of non-source files from sources
-              go-task # https://taskfile.dev/ # Task runner / simpler Make alternative written in Go
-              just # https://github.com/casey/just # Handy way to save and run project-specific commands
 
               # Data manipulation:
               gawk # https://www.gnu.org/software/gawk/ # GNU implementation of the Awk programming language
@@ -73,8 +66,6 @@
               k6 # https://github.com/grafana/k6 # Modern load testing tool, using Go and JavaScript
               har-to-k6 # https://github.com/grafana/har-to-k6 # Converts LI-HAR and HAR to K6 script
               goreplay # https://github.com/probelabs/goreplay # Open-source tool for capturing and replaying live HTTP traffic
-
-              # ...
             ];
           };
 
