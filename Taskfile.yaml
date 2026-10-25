@@ -65,6 +65,21 @@ tasks:
           ls -lah {{ .OUTPUT_DIR | shellQuote }}
           echo
           echo "::endgroup::"
+          echo
+          echo "::group::Contents of sbom.cdx.json"
+          cat {{ .SBOM_CDX | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo
+          echo "::group::Contents of sbom.csv"
+          cat {{ .SBOM_CSV | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo "::group::Contents of sbom.spdx.json"
+          cat {{ .SBOM_SPDX | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo
 
   container:test:
     desc: Encapsulates operations testing the newly derived image
