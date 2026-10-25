@@ -99,8 +99,8 @@ tasks:
     internal: true
     desc: Run sample commands in the image to ensure it is usable
     cmds:
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
+      - cmd: podman run --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
+      - cmd: podman run --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
 
   container:run:
     desc: Build, run the container interactively and then remove it
