@@ -65,6 +65,22 @@ tasks:
           ls -lah {{ .OUTPUT_DIR | shellQuote }}
           echo
           echo "::endgroup::"
+          echo "::group::Contents of sbom.cdx.json"
+          echo
+          cat {{ .SBOM_CDX | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo "::group::Contents of sbom.csv"
+          echo
+          cat {{ .SBOM_CSV | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo "::group::Contents of sbom.spdx.json"
+          echo
+          cat {{ .SBOM_SPDX | shellQuote }}
+          echo
+          echo "::endgroup::"
+          echo
 
   container:test:
     desc: Encapsulates operations testing the newly derived image
@@ -99,8 +115,8 @@ tasks:
     internal: true
     desc: Run sample commands in the image to ensure it is usable
     cmds:
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
-      - cmd: podman run -it --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
+      - cmd: podman run --rm  {{ .CONTAINER_ID | shellQuote }} ls -lah /
+      - cmd: podman run --rm  {{ .CONTAINER_ID | shellQuote }} kubectl version --client
 
   container:run:
     desc: Build, run the container interactively and then remove it
