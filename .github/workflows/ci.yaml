@@ -38,16 +38,13 @@ jobs:
           nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
 
       - name: Install DevEnv
-        run: |
-          nix profile add nixpkgs#devenv
+        run: nix profile add nixpkgs#devenv
 
       - name: Run devenv test
-        run: |
-          devenv test
+        run: devenv test
 
       - name: Run tasks
-        shell: devenv --profile github-actions shell bash -- -e {0}
-        run: |
-          task ci
+        shell: devenv shell bash -- -e {0}
+        run: task ci
 
 # eof
