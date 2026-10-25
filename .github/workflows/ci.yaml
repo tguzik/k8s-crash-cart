@@ -29,13 +29,8 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-26.05
 
-      - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # https://github.com/cachix/cachix-action/releases/tag/v17
-        with:
-          name: devenv
-
       - name: Print nixpkgs version
-        run: |
-          nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+        run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
 
       - name: Install DevEnv
         run: nix profile add nixpkgs#devenv
